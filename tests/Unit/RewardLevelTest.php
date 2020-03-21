@@ -105,38 +105,57 @@ class UserTest extends TestCase
     }
 
     /**
+     * reward level manual test
+     *
+     * @return void
+     */
+    public function test_spent_amount_gt_2000_should_be_reward_level_3()
+    {
+        $this->assertEquals( $this->rewardHelper->getLevel(rand(2000,10000)), 3);
+    }
+
+    /**
      * Test Reward Level Using Created Sample Data
      *
      * @return void
      */
     public function test_spent_amount_using_created_sample_data_should_match()
     {
-        //create 1 user
-        $user = factory(User::class, 1)->create();
+        // SETTINGS
+        $totalUsers = 200;
+        $totalProducts = 100;
+        $totalTransactions = 1000;
+        $maxOrdersPerTransaction = 10;
+        $maxQuantityPerOrder = 10;
 
-        //create 10 products
-        factory(Product::class, 10)->create();
 
-        //simulate orders for 20 customers
-        for ($i=0; $i <= 20; $i++) { 
-            //random number of orders
-            $ordersCount = $this->faker->numberBetween(1,20);
+        //create user
+        $users = factory(User::class, $totalUsers)->create();
+
+        //create products
+        $products = factory(Product::class, $totalProducts)->create();
+
+        //create transactions
+        for ($x=0; $x <= $totalTransactions; $x++) { 
+            
+            $ordersCounter = rand(1,$maxOrdersPerTransaction);
 
             $totalSpent = 0;
             $mostRecentPurchaseAmount = 0;
-            for ($i=0; $i <= $ordersCount; $i++) { 
-                $productId = $this->faker->numberBetween(1,10);
-                $quantity = $this->faker->numberBetween(1,3);
-                $productPrice = Product::find($productId)->price;
+            for ($i=0; $i <= $ordersCounter; $i++) { 
+                $productId = rand(1,$totalProducts);
+                $quantity = rand(1,$maxQuantityPerOrder);
+                $productPrice = $products->find($productId)->price;
 
                 // order info
                 $amountPaid = floatval( number_format( $productPrice * $quantity, 2));
                 $totalSpent += $amountPaid;
-                $mostRecentPurchaseAmount = $i !== $ordersCount ? 0: $amountPaid;
+                $mostRecentPurchaseAmount = $i !== $ordersCounter ? 0: $amountPaid;
 
+                //Note: probably needs restructuring orders
                 //create an order
                 Order::create([
-                    'user_id' => $user->first()->id,
+                    'user_id' => $users->find(rand(1,$totalUsers))->id,
                     'product_id' => $productId,
                     'quantity' => $quantity,
                     'amount_paid' => $amountPaid,
