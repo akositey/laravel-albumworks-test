@@ -1,4 +1,4 @@
-# Laravel AlbumWorks Test
+# Laravel Testing Using PHPUnit
 a sample project is using Laravel 7 with PHPUnit tests.
 
 ## Requirements
@@ -9,9 +9,9 @@ Since this project is in Laravel 7, we should meet its server requirements:
 ## Tests Location
 - all tests are inside the `tests/` folder
 
-## Answers 
-- Answer to Q1 is in `Feature/AlphabetTest.php`
-- Answer to Q2 is `Unit/RewardLevelTest.php`
+## Sample Tests 
+- `Feature/AlphabetTest.php`
+- `Unit/RewardLevelTest.php`
 
 ## Running Tests (PHPUnit)
 1. after cloning or downloading, run `composer install` inside the project's root directory using your terminal/shell
